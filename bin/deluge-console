@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+[[ "$TRACE" ]] && set -x
+set -eu -o pipefail
+
+source .env
+
+docker run \
+	--rm \
+	--interactive \
+	--tty \
+	--env TERM=screen-256color \
+	--link "$DELUGED_CONTAINER_NAME" \
+	deluge 
+		deluge-console

@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+[[ "$TRACE" ]] && set -x
+set -eu -o pipefail
+
+source .env
+
+docker run \
+	--name="$DELUGED_CONTAINER_NAME" \
+	--publish "$DELUGED_CONTAINER_PORT_DAEMON":58846 \
+	--publish "$DELUGED_CONTAINER_PORT_INCOMING":58946 \
+	--user "$(id -u):$(id -g)" \
+	--volume /etc/localtime:/etc/localtime:ro \
+	--volume "$PWD"/data:/data \
+	--volume "$PWD"/config:/.config \
+	--detach \
+	"$DELUGE_IMAGE_NAME" \
+		deluged \
+		--do-not-daemonize \
+		--loglevel="$DELUGED_CONTAINER_LOGLEVEL"

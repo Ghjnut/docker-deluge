@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+[[ "$TRACE" ]] && set -x
+set -eu -o pipefail
+
+source .env
+
+docker run \
+	--detach \
+	--name="$DELUGE_WEB_CONTAINER_NAME" \
+	--user "$(id -u):$(id -g)" \
+	--publish "$DELUGE_WEB_PORT":8112 \
+	--link "$DELUGED_CONTAINER_NAME" \
+	--volume $(pwd)/config:/.config \
+	"$DELUGE_IMAGE_NAME" \
+		deluge-web \
+		--loglevel="$DELUGE_WEB_LOGLEVEL"

@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+[[ "$TRACE" ]] && set -x
+set -eu -o pipefail
+
+source .env
+
+docker build \
+	--tag="$DELUGE_IMAGE_NAME" \
+	--force-rm \
+	.
